@@ -1,0 +1,40 @@
+# Game: Bayonetta First Climax (X360), MadWorld (Wii)
+# by Fatduck, edited by TGE    Jan 2015
+# script for QuickBMS http://aluigi.org/papers.htm#quickbms
+
+endian big
+
+get filename filename
+
+idstring "DAT\0"
+get NUMRES long
+get OFSRESLIST long
+get OFSRESTYPELIST long      #no needed
+get OFSRESNAMELIST long
+get OFSSIZERESLIST long
+
+goto OFSRESNAMELIST
+get STGLEN long
+savepos OFSRESNAMELIST
+
+for i = 0 < NUMRES
+  goto OFSRESLIST
+  get OFSRES long
+  savepos OFSRESLIST
+ 
+  goto OFSRESNAMELIST
+  getdstring RESNAME STGLEN
+  savepos OFSRESNAMELIST
+ 
+  goto OFSSIZERESLIST
+  get SIZERES long
+  savepos OFSSIZERESLIST
+  get filename filename
+  set filename basename filename
+  string filename += \
+  string filename += RESNAME
+  if SIZERES != 0
+  log filename OFSRES SIZERES
+  #log RESNAME OFSRES SIZERES
+  endif
+next i
